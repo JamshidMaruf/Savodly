@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NServiceBus;
 using Savodly.DataAccess.Context;
 using Savodly.DataAccess.Repositories;
 using Savodly.DataAccess.UnitOfWorks;
+using Savodly.Service.Services.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
