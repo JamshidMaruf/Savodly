@@ -9,5 +9,8 @@ public class Student : Auditable
 
     public ICollection<StudentCourse> StudentCourses { get; set; }
     public ICollection<StudentHomeTask> StudentHomeTasks { get; set; }
+    public ICollection<HomeTaskResult> HomeTaskResults { get; set; }
+    public ICollection<Order> Orders { get; set; }
+    public ICollection<StudentPointHistory> StudentPointsHistories { get; set; }
 }
 

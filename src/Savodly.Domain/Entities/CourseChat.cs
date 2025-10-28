@@ -8,5 +8,7 @@ public class CourseChat : Auditable
 
     public Teacher Teacher { get; set; }
     public Course Course { get; set; }
+    public ICollection<CourseChatMessage> CourseChatMessages { get; set; }
+    public ICollection<CourseChatMember> CourseChatMembers { get; set; }
 } 
 

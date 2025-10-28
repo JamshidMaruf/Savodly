@@ -11,4 +11,5 @@ public class Quiz : Auditable
     public int TestCount { get; set; }
 
     public Course Course { get; set; }
+    public ICollection<QuizTest> QuizTests { get; set; }
 }

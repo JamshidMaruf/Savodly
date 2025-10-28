@@ -5,6 +5,8 @@ public class Product : Auditable
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }
+    public int TeacherId { get; set; }
 
+    public OrderItem OrderItem { get; set; }
     //product kimga tegishli bo'ladi teachergami?
 }

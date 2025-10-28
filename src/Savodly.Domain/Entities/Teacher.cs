@@ -6,6 +6,7 @@ public class Teacher : Auditable
     public string LastName { get; set; }
     public string PhoneNumber {  get; set; }
 
-    public ICollection<TeacherSubscription> Subscriptions { get; set; }
+    public TeacherSubscription Subscription { get; set; }
     public ICollection<Course> Courses { get; set; }
+    public ICollection<Product> Products { get; set; }
 }

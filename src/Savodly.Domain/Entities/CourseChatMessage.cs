@@ -9,5 +9,6 @@ public class CourseChatMessage : Auditable
 
     public CourseChat CourseChat { get; set; }
     public CourseChatMember CourseChatMember { get; set; }
+    public ICollection<CourseChatMessageFile> CourseChatMessageFiles { get; set; }
 }
 
