@@ -2,19 +2,44 @@
 using Savodly.Domain.Entities;
 
 namespace Savodly.DataAccess.UnitOfWorks;
-public interface IUnitOfWork
+public interface IUnitOfWork : IDisposable
 {
-    IRepository<Application> Aplications { get; set; }
-    IRepository<Course> Courses { get; set; }
-    IRepository<CourseChat> CourseChats { get; set; }
-    IRepository<CourseChatMember> CourseChatMembers { get; set; }
-    IRepository<CourseChatMessage> CourseChatMessages { get; set; }
-    IRepository<CourseChatMessageFile> CourseChatMessageFiles { get; set; }
-    IRepository<Exam> Exams { get; set; }
-    IRepository<HomeTaskResult> HomeTaskResults { get; set; }
-    IRepository<Lesson> Lessons {  get; set; }
-    IRepository<LessonDocumentation> LessonsDocumentations { get; set; }
-    IRepository<LessonFile> LessonsFiles { get; set; }
-    IRepository<LessonHomeTask> LessonHomeTasks { get; set; }
+    IRepository<Application> Aplications { get; }
+    IRepository<Course> Courses { get; }
+    IRepository<CourseChat> CourseChats { get;}
+    IRepository<CourseChatMember> CourseChatMembers { get; }
+    IRepository<CourseChatMessage> CourseChatMessages { get; }
+    IRepository<CourseChatMessageFile> CourseChatMessageFiles { get; }
+    IRepository<Exam> Exams { get; }
+    IRepository<HomeTaskResult> HomeTaskResults { get; }
+    IRepository<Lesson> Lessons { get; }
+    IRepository<LessonDocumentation> LessonsDocumentations { get; }
+    IRepository<LessonFile> LessonsFiles { get; }
+    IRepository<LessonHomeTask> LessonHomeTasks { get; }
+    IRepository<LessonHomeTaskFile> LessonHomeTaskFiles { get; }
+    IRepository<LessonVideo> LessonVideos { get; }
+    IRepository<Module> Modules { get; }
+    IRepository<OnlineLesson> OnlineLessons { get; }
+    IRepository<Order> Orders { get; }
+    IRepository<OrderItem> OrderItems { get; }
+    IRepository<PointSetting> PointSettings { get; }
+    IRepository<Product> Products { get; }
+    IRepository<Quiz> Quizes { get; }
+    IRepository<QuizResult> QuizResults { get; }
+    IRepository<QuizTest> QuizTests { get; }
+    IRepository<QuizTestAnswer> QuizTestAnswers { get; }
+    IRepository<QuizTestOption> QuizTestOptions { get; }
+    IRepository<Student> Students { get; }
+    IRepository<StudentCourse> StudentCourses { get; }
+    IRepository<StudentHomeTask> StudentHomeTasks { get; }
+    IRepository<StudentPointHistory> StudentPointHistories { get; }
+    IRepository<Subscription> Subscriptions { get; }
+    IRepository<SubscriptionOpportunity> SubscriptionsOpportunities { get; }
+    IRepository<Teacher> Teachers { get; }
+    IRepository<TeacherSubscription> TeacherSubscriptions {  get; }
 
+    Task SaveAsync();
+    Task CommitAsync();
+    Task BeginTransactionAsync();
+    Task RollbackTransactionAsync();
 }
