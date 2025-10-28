@@ -1,7 +1,7 @@
 ﻿namespace Savodly.Domain.Enums;
 public enum QuizTestType
 {
-    MultpeChoice,
+    MultipleChoice,
     SingleChoice,
     ClosedChoice
 }

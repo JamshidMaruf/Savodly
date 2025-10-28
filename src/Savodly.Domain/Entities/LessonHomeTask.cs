@@ -8,4 +8,5 @@ public class LessonHomeTask : Auditable
     public Lesson Lesson { get; set; }
     public ICollection<LessonHomeTaskFile> HomeTaskFiles { get; set; }
     public ICollection<StudentHomeTask> StudentHomeTasks { get; set; }
+    public ICollection<HomeTaskResult> HomeTaskResults { get; set; }
 }

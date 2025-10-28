@@ -9,4 +9,5 @@ public class Application : Auditable
 
     public Quiz Quiz { get; set; }
     public Student Student { get; set; }
+    public QuizResult QuizResult { get; set; }
 }

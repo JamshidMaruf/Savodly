@@ -17,4 +17,5 @@ public class Course : Auditable
     public ICollection<Module> Modules { get; set; }
     public ICollection<Exam> Exams { get; set; }
     public ICollection<Quiz> Quizes { get; set; }
+    public ICollection<OnlineLesson> OnlineLessons { get; set; }
 }
