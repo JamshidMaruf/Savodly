@@ -10,4 +10,9 @@
     <Folder Include="Services\Settings\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Savodly.DataAccess\Savodly.DataAccess.csproj" />
+    <ProjectReference Include="..\Savodly.Domain\Savodly.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
