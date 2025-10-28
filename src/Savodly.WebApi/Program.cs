@@ -1,19 +1,33 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using Microsoft.EntityFrameworkCore;
+using Savodly.DataAccess.Context;
+
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<AppDbContext>(option
+    => option.UseNpgsql(builder.Configuration.GetConnectionString("PostgresSQLConnection")));
+
+
+builder.Services.AddAuthorization();
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-   
+app.UseSwagger();
+
+app.UseSwaggerUI();
+
+
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
