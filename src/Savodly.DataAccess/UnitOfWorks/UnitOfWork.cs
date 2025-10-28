@@ -39,6 +39,7 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
     public IRepository<SubscriptionOpportunity> SubscriptionsOpportunities { get; } = new Repository<SubscriptionOpportunity>(context);
     public IRepository<Teacher> Teachers { get; } = new Repository<Teacher>(context);
     public IRepository<TeacherSubscription> TeacherSubscriptions { get; } = new Repository<TeacherSubscription>(context);
+    public IRepository<Setting> Settings { get; } = new Repository<Setting>(context);
 
     public async Task BeginTransactionAsync()
     {
