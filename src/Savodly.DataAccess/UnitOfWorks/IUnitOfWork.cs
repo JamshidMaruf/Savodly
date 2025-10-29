@@ -38,6 +38,7 @@ public interface IUnitOfWork : IDisposable
     IRepository<Teacher> Teachers { get; }
     IRepository<TeacherSubscription> TeacherSubscriptions {  get; }
     IRepository<Setting> Settings { get; }
+    object StudentsCourses { get; }
 
     Task SaveAsync();
     Task CommitAsync();
