@@ -66,8 +66,8 @@ public class StudentService(IUnitOfWork unitOfWork) : IStudentService
             DateOfBirth = student.DateOfBirth,
             CreatedAt = student.CreatedAt,
             UpdatedAt = student.UpdatedAt,
-        }).;
-        ToListAsync();
+        });
+        
     }
     public async Task<List<StudentViewModel>> GetByCourseIdAsync(int courseId)
     {
@@ -84,7 +84,6 @@ public class StudentService(IUnitOfWork unitOfWork) : IStudentService
             CreatedAt = student.CreatedAt,
             UpdatedAt = student.UpdatedAt,
         }).ToListAsync();
-
     }
 
     public async Task<List<StudentViewModel>> GetByTeacherIdAsync(int teacherId)
@@ -108,8 +107,5 @@ public class StudentService(IUnitOfWork unitOfWork) : IStudentService
     public Task<bool> PhoneNumberExistsAsync(string phoneNumber)
     {
         return unitOfWork.Students.ExistsAsync(s => s.PhoneNumber == phoneNumber);
-
     }
-
-   
 }
