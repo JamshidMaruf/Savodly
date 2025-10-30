@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Savodly.DataAccess\Savodly.DataAccess.csproj" />
     <ProjectReference Include="..\Savodly.Domain\Savodly.Domain.csproj" />
   </ItemGroup>
