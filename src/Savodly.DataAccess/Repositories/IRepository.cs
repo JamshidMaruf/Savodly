@@ -14,4 +14,6 @@ public interface IRepository<TEntity>
     void Insert(Savodly.Service.Student student);
     void Insert(Savodly.Service.Student student);
     void Insert(Savodly.Service.Student student);
+    void Insert(Savodly.Service.Student student);
+    void Insert(Savodly.Service.Student student);
 }
