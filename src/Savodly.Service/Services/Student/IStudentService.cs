@@ -10,12 +10,11 @@ namespace Savodly.Service.Student
     public interface IStudentService
     {
         Task CreateAsync(StudentCreateModel model);
-        Task UpdateAsync(StudentUpdateModel model);
+        Task UpdateAsync(int id, StudentUpdateModel model);
         Task DeleteAsync(int id);
-        Task<StudentViewModel> GetAsync(int id);
-        Task<List<StudentViewModel>> GetAllAsync();
-        Task<List<StudentViewModel>> GetByTeacherIdAsync(int teacherId);
-        Task<List<StudentViewModel>> GetByCourseIdAsync(int courseId);
-        Task<bool> PhoneNumberExistsAsync(string phoneNumber);
+        Task<StudentViewModel> GetByIdAsync(int id);
+        Task<List<StudentViewModel>> GetAllAsync(string search);
+        Task<List<StudentViewModel>> GetAllByTeacherIdAsync(int teacherId);
+        Task<List<StudentViewModel>> GetAllByCourseIdAsync(int courseId);
     }
 }
