@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Savodly.DataAccess.UnitOfWorks;
-using Savodly.Service.Exceptions;
-using Savodly.Service.Student.Models;
 using Savodly.Domain.Entities;
+using Savodly.Service.Exceptions;
+using Savodly.Service.Students.Models;
 
 
 
-namespace Savodly.Service.Student;
+namespace Savodly.Service.Students;
 
 public class StudentService(IUnitOfWork unitOfWork) : IStudentService
 {
@@ -15,10 +15,11 @@ public class StudentService(IUnitOfWork unitOfWork) : IStudentService
         unitOfWork.Students.Insert(new Student
         {
             FirstName = model.FirstName,
-            LastName = model.LastName,
+            LastName  = model.LastName,
             PhoneNumber = model.PhoneNumber,
-            DateOfBirth = model.DateOfBirth,
+            DateOfBirth = model.DateOfBirth ,  
         });
+
         await unitOfWork.SaveAsync();
     }
 
