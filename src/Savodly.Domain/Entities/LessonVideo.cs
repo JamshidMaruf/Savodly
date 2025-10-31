@@ -2,9 +2,9 @@
 
 public class LessonVideo : Auditable
 {
+    public string FileName { get; set; }
+    public string FilePath { get; set; }
     public int LessonId { get; set; }
-    public string LessonName { get; set; }
-    public string VideoPath { get; set; }
 
     public Lesson Lesson { get; set; }
 }

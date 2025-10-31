@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Savodly.DataAccess.UnitOfWorks;
 using Savodly.Domain.Entities;
 using Savodly.Service.Exceptions;
+using Savodly.Service.Services.Files;
 using Savodly.Service.Services.Lessons.Models;
 
 namespace Savodly.Service.Services.Lessons;
 
-public class LessonService(IUnitOfWork unitOfWork) : ILessonService
+public class LessonService(IUnitOfWork unitOfWork,IFileService fileService) : ILessonService
 {
     public async Task Create(LessonCreateModel model)
     {
@@ -70,26 +71,73 @@ public class LessonService(IUnitOfWork unitOfWork) : ILessonService
 
     public async Task<List<LessonViewModel>> GetAllByModuleId(int moduleId)
     {
-        var lessons = await unitOfWork.Lessons
+         return await unitOfWork.Lessons
             .SelectAllAsQueryable()
             .Where(l => l.ModuleId == moduleId)
+            .Select(l => new LessonViewModel
+            {
+                Name = l.Name
+            })
             .ToListAsync();
-
-        return 
     }
 
-    public Task UploadFileAsync(int lessonId, IFormFile file)
+    public async Task UploadFileAsync(int lessonId, IFormFile file)
     {
-        throw new NotImplementedException();
+        _ = await unitOfWork.Lessons.SelectAsync(l => l.Id == lessonId)
+            ?? throw new NotFoundException($"No lesson was found with ID {lessonId}");
+
+        string inputFileExtension = Path.GetExtension(file.FileName);
+        string[] acceptableExtensions = new[] { ".jpg", ".png", ".docx", ".pdf", ".sql", ".txt", ".csv" };
+        
+        if (acceptableExtensions.Contains(inputFileExtension))
+            throw new ArgumentIsNotValidException($"{inputFileExtension} inputFileExtension is not accepted");
+
+        var result = await fileService.UploadAsync(file, "Files/Files");
+
+        unitOfWork.LessonFiles.Insert(new LessonFile
+        {
+            FileName = result.FileName,
+            FilePath = result.FilePath,
+            LessonId = lessonId
+        });
+
+        await unitOfWork.SaveAsync();
     }
 
-    public Task UploadVideoAsync(int lessonId, IFormFile video)
+    public async Task UploadVideoAsync(int lessonId, IFormFile video)
     {
-        throw new NotImplementedException();
+        _ = await unitOfWork.Lessons.SelectAsync(l => l.Id == lessonId)
+            ?? throw new NotFoundException($"No lesson was found with ID = {lessonId}");
+
+        string inputFileExtension = Path.GetExtension(video.FileName);
+        string[] acceptableExtensions = new[] { ".mp4", ".avi", ".mkv", ".mov", ".flv" };
+
+        if (acceptableExtensions.Contains(inputFileExtension))
+            throw new ArgumentIsNotValidException($"{inputFileExtension} extension is not accepted");
+
+        var result = await fileService.UploadAsync(video, "Files/Videos");
+
+        unitOfWork.LessonVideos.Insert(new LessonVideo
+        {
+            FileName = result.FileName,
+            FilePath = result.FilePath,
+            LessonId = lessonId
+        });
+
+        await unitOfWork.SaveAsync();
     }
 
-    public Task AddDocumentationAsync(int lessonId, string text)
+    public async Task AddDocumentationAsync(int lessonId, string text)
     {
-        throw new NotImplementedException();
+        _ = await unitOfWork.Lessons.SelectAsync(l => l.Id == lessonId)
+            ?? throw new NotFoundException($"No lesson was found with ID = {lessonId}");
+
+        unitOfWork.LessonDocumentations.Insert(new LessonDocumentation
+        {
+            Text = text,
+            LessonId = lessonId
+        });
+
+        await unitOfWork.SaveAsync();
     }
 }
