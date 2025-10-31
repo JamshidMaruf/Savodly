@@ -2,6 +2,7 @@
 using Savodly.DataAccess.Context;
 using Savodly.DataAccess.Repositories;
 using Savodly.DataAccess.UnitOfWorks;
+using Savodly.Service.Helpers;
 using Savodly.Service.Services.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,10 +27,11 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+EnviromentHelper.WebRootPath = builder.Environment.WebRootPath;
+
 app.UseSwagger();
 
 app.UseSwaggerUI();
-
 
 app.UseHttpsRedirection();
 

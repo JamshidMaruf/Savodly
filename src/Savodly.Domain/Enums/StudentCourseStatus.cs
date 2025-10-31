@@ -2,7 +2,7 @@
 public enum StudentCourseStatus
 {
     Upcoming,
-    Studiying,
+    Studying,
     Removed,
     Completed
 }

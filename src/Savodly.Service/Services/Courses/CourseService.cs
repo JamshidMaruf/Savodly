@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Savodly.DataAccess.UnitOfWorks;
 using Savodly.Domain.Entities;
 using Savodly.Domain.Enums;
@@ -13,18 +8,6 @@ using Savodly.Service.Services.Courses.Models;
 namespace Savodly.Service.Services.Courses;
 public class CourseService(IUnitOfWork unitOfWork) : ICourseService
 {
-    public async Task ChangeStatusAsync(int id, CourseStatus status)
-    {
-        var existCourse = await unitOfWork.Courses.SelectAsync(x => x.Id == id)
-            ?? throw new NotFoundException("Course not found"); 
-
-        existCourse.Status = status;
-
-        unitOfWork.Courses.Update(existCourse);
-
-        await unitOfWork.SaveAsync();
-    }
-
     public async Task CreateAsync(CourseCreateModel model)
     {
         unitOfWork.Courses.Insert(new Course
@@ -39,6 +22,22 @@ public class CourseService(IUnitOfWork unitOfWork) : ICourseService
         await unitOfWork.SaveAsync();
     }
 
+    public async Task UpdateAsync(int id, CourseUpdateModel model)
+    {
+        var existCourse = await unitOfWork.Courses.SelectAsync(x => x.Id == id)
+            ?? throw new NotFoundException("Course not found");
+
+        existCourse.Name = model.Name;
+        existCourse.Description = model.Description;
+        existCourse.StartTime = model.StartTime;
+        existCourse.EndTime = model.EndTime;
+        existCourse.Status = model.Status;
+
+        unitOfWork.Courses.Update(existCourse);
+
+        await unitOfWork.SaveAsync();
+    }
+
     public async Task DeleteAsync(int id)
     {
         var existCourse = await unitOfWork.Courses.SelectAsync(x => x.Id == id)
@@ -47,23 +46,6 @@ public class CourseService(IUnitOfWork unitOfWork) : ICourseService
         unitOfWork.Courses.Delete(existCourse);
 
         await unitOfWork.SaveAsync();
-    }
-
-    public async Task<List<CourseViewModel>> GetAllByTeacherIdAsync(int id)
-    {
-        return await unitOfWork.Courses
-            .SelectAllAsQueryable()
-            .Where(x => x.TeacherId == id)
-            .Select(x => new CourseViewModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                StartTime = x.StartTime,
-                EndTime = x.EndTime,
-                Status = x.Status
-            })
-            .ToListAsync();
     }
 
     public async Task<CourseViewModel> GetByIdAsync(int id)
@@ -81,6 +63,23 @@ public class CourseService(IUnitOfWork unitOfWork) : ICourseService
             })
             .FirstOrDefaultAsync(x => x.Id == id)
             ?? throw new NotFoundException("Course not found");
+    }
+
+    public async Task<List<CourseViewModel>> GetAllByTeacherIdAsync(int id)
+    {
+        return await unitOfWork.Courses
+            .SelectAllAsQueryable()
+            .Where(x => x.TeacherId == id)
+            .Select(x => new CourseViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                StartTime = x.StartTime,
+                EndTime = x.EndTime,
+                Status = x.Status
+            })
+            .ToListAsync();
     }
 
     public async Task StudentAddAsync(StudentAddModel model)
@@ -115,16 +114,12 @@ public class CourseService(IUnitOfWork unitOfWork) : ICourseService
         await unitOfWork.SaveAsync();
     }
 
-    public async Task UpdateAsync(int id, CourseUpdateModel model)
+    public async Task ChangeStatusAsync(int id, CourseStatus status)
     {
         var existCourse = await unitOfWork.Courses.SelectAsync(x => x.Id == id)
             ?? throw new NotFoundException("Course not found");
 
-        existCourse.Name = model.Name;
-        existCourse.Description = model.Description;
-        existCourse.StartTime = model.StartTime;
-        existCourse.EndTime = model.EndTime;
-        existCourse.Status = model.Status;
+        existCourse.Status = status;
 
         unitOfWork.Courses.Update(existCourse);
 

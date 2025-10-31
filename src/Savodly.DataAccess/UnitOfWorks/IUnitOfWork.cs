@@ -13,8 +13,8 @@ public interface IUnitOfWork : IDisposable
     IRepository<Exam> Exams { get; }
     IRepository<HomeTaskResult> HomeTaskResults { get; }
     IRepository<Lesson> Lessons { get; }
-    IRepository<LessonDocumentation> LessonsDocumentations { get; }
-    IRepository<LessonFile> LessonsFiles { get; }
+    IRepository<LessonDocumentation> LessonDocumentations { get; }
+    IRepository<LessonFile> LessonFiles { get; }
     IRepository<LessonHomeTask> LessonHomeTasks { get; }
     IRepository<LessonHomeTaskFile> LessonHomeTaskFiles { get; }
     IRepository<LessonVideo> LessonVideos { get; }
@@ -38,7 +38,6 @@ public interface IUnitOfWork : IDisposable
     IRepository<Teacher> Teachers { get; }
     IRepository<TeacherSubscription> TeacherSubscriptions {  get; }
     IRepository<Setting> Settings { get; }
-    object StudentsCourses { get; }
 
     Task SaveAsync();
     Task CommitAsync();
