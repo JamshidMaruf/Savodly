@@ -15,8 +15,8 @@ public class UnitOfWork(AppDbContext context) : IUnitOfWork
     public IRepository<Exam> Exams { get; } = new Repository<Exam>(context);
     public IRepository<HomeTaskResult> HomeTaskResults  { get; } = new Repository<HomeTaskResult>(context);
     public IRepository<Lesson> Lessons { get; } = new Repository<Lesson>(context);
-    public IRepository<LessonDocumentation> LessonsDocumentations { get; } = new Repository<LessonDocumentation>(context);
-    public IRepository<LessonFile> LessonsFiles { get; } = new Repository<LessonFile>(context);
+    public IRepository<LessonDocumentation> LessonDocumentations { get; } = new Repository<LessonDocumentation>(context);
+    public IRepository<LessonFile> LessonFiles { get; } = new Repository<LessonFile>(context);
     public IRepository<LessonHomeTask> LessonHomeTasks { get; } = new Repository<LessonHomeTask>(context);
     public IRepository<LessonHomeTaskFile> LessonHomeTaskFiles { get; } = new Repository<LessonHomeTaskFile>(context);
     public IRepository<LessonVideo> LessonVideos { get; } = new Repository<LessonVideo>(context);

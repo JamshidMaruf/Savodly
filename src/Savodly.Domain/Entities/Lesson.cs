@@ -8,7 +8,7 @@ public class Lesson : Auditable
 
     public Course Course { get; set; }
     public Module Module { get; set; }
-    public ICollection<LessonVideo> LessonsVideos { get; set; }
-    public ICollection<LessonFile> LessonsFiles { get; set; }
-    public LessonDocumentation LessonDocumentation { get; set; }
+    public ICollection<LessonVideo> LessonVideos { get; set; }
+    public ICollection<LessonFile> LessonFiles { get; set; }
+    public LessonDocumentation Documentation { get; set; }
 }
