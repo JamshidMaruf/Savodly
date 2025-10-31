@@ -9,4 +9,9 @@ public interface IRepository<TEntity>
     void Delete(TEntity entity);
     Task<TEntity> SelectAsync(Expression<Func<TEntity, bool>> predicate, string[] include = null);
     IQueryable<TEntity> SelectAllAsQueryable();
+    void Insert(Savodly.Service.Student student);
+    void Insert(Savodly.Service.Student student);
+    void Insert(Savodly.Service.Student student);
+    void Insert(Savodly.Service.Student student);
+    void Insert(Savodly.Service.Student student);
 }

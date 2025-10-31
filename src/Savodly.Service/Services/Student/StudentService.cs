@@ -1,5 +1,10 @@
-﻿using Savodly.DataAccess.UnitOfWorks;
+﻿using Microsoft.EntityFrameworkCore;
+using Savodly.DataAccess.UnitOfWorks;
+using Savodly.Service.Exceptions;
 using Savodly.Service.Student.Models;
+using Savodly.Domain.Entities;
+
+
 
 namespace Savodly.Service.Student;
 
@@ -7,24 +12,26 @@ public class StudentService(IUnitOfWork unitOfWork) : IStudentService
 {
     public async Task CreateAsync(StudentCreateModel model)
     {
-      unitOfWork.Students.Insert(new Domain.Entities.Student
-      {
-          FirstName = model.FirstName,
-          LastName = model.LastName,
-          PhoneNumber = model.PhoneNumber,
-      });
+        unitOfWork.Students.Insert(new Student
+        {
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            PhoneNumber = model.PhoneNumber,
+            DateOfBirth = model.DateOfBirth,
+        });
         await unitOfWork.SaveAsync();
-
     }
 
-    public async Task UpdateAsync(StudentUpdateModel model)
+    public async Task UpdateAsync(int id, StudentUpdateModel model)
     {
-        var existStudent = await unitOfWork.Students.SelectAsync(x => x.Id == model.Id)
-            ?? throw new Exception("This user is not found!");
+        var existStudent = await unitOfWork.Students.SelectAsync(x => x.Id == id)
+            ?? throw new NotFoundException("This student is not found!");
+
         existStudent.FirstName = model.FirstName;
         existStudent.LastName = model.LastName;
         existStudent.PhoneNumber = model.PhoneNumber;
         existStudent.DateOfBirth = model.DateOfBirth;
+
         unitOfWork.Students.Update(existStudent);
         await unitOfWork.SaveAsync();
     }
@@ -32,80 +39,59 @@ public class StudentService(IUnitOfWork unitOfWork) : IStudentService
     public async Task DeleteAsync(int id)
     {
         var existStudent = await unitOfWork.Students.SelectAsync(x => x.Id == id)
-            ?? throw new Exception("This user is not found!");
+            ?? throw new NotFoundException("This student is not found!");
+
         unitOfWork.Students.Delete(existStudent);
         await unitOfWork.SaveAsync();
     }
-    public async Task<StudentViewModel> GetAsync(int id)
+
+    public async Task<List<StudentViewModel>> GetAllAsync(string search)
     {
-        var student = await unitOfWork.Students.SelectAsync(x => x.Id == id)
-            ?? throw new Exception("This user is not found!");
-        return new StudentViewModel
+        var students = unitOfWork.Students.SelectAllAsQueryable()
+            .Where(s => !s.IsDeleted);
+
+        if (!string.IsNullOrEmpty(search))
         {
-            Id = student.Id,
-            FirstName = student.FirstName,
-            LastName = student.LastName,
-            FullName = $"{student.FirstName} {student.LastName}",
-            PhoneNumber = student.PhoneNumber,
-            DateOfBirth = student.DateOfBirth,
-            CreatedAt = student.CreatedAt,
-            UpdatedAt = student.UpdatedAt,
-        };
+            students = students.Where(s =>
+                s.FirstName.Contains(search) ||
+                s.LastName.Contains(search) ||
+                s.PhoneNumber.Contains(search));
+        }
+
+        return await students.Select(s => new StudentViewModel
+        {
+            Id = s.Id,
+            FirstName = s.FirstName,
+            LastName = s.LastName,
+            PhoneNumber = s.PhoneNumber,
+            DateOfBirth = s.DateOfBirth,
+        })
+        .ToListAsync();
     }
 
-    public async Task<List<StudentViewModel>> GetAllAsync()
+    public async Task<StudentViewModel> GetByIdAsync(int id)
     {
-        var students = unitOfWork.Students.SelectAllAsQueryable();
-        return await students.Select(student => new StudentViewModel
-        {
-            Id = student.Id,
-            FirstName = student.FirstName,
-            LastName = student.LastName,
-            FullName = $"{student.FirstName} {student.LastName}",
-            PhoneNumber = student.PhoneNumber,
-            DateOfBirth = student.DateOfBirth,
-            CreatedAt = student.CreatedAt,
-            UpdatedAt = student.UpdatedAt,
-        });
-        
-    }
-    public async Task<List<StudentViewModel>> GetByCourseIdAsync(int courseId)
-    {
-        var students = unitOfWork.StudentCourses.SelectAllAsQueryable()
-            .Where(sc => sc.CourseId == courseId)
-            .Select(student => new StudentViewModel
-        {
-            Id = student.Id,
-            FirstName = student.FirstName,
-            LastName = student.LastName,
-            FullName = $"{student.FirstName} {student.LastName}",
-            PhoneNumber = student.PhoneNumber,
-            DateOfBirth = student.DateOfBirth,
-            CreatedAt = student.CreatedAt,
-            UpdatedAt = student.UpdatedAt,
-        }).ToListAsync();
+        return await unitOfWork.Students
+            .SelectAllAsQueryable()
+            .Select(s => new StudentViewModel
+            {
+                Id = s.Id,
+                FirstName = s.FirstName,
+                LastName = s.LastName,
+                PhoneNumber = s.PhoneNumber,
+                DateOfBirth = s.DateOfBirth,
+            })
+            .FirstOrDefaultAsync(s => s.Id == id)
+            ?? throw new NotFoundException("This student not found!");
     }
 
-    public async Task<List<StudentViewModel>> GetByTeacherIdAsync(int teacherId)
+    public Task<List<StudentViewModel>> GetAllByTeacherIdAsync(int teacherId)
     {
-         return await  unitOfWork.StudentCourses.SelectAllAsQueryable()
-            student 
-            .Where(sc => sc.Course.TeacherId == teacherId)
-            .Select(student => new StudentViewModel
-        {
-            Id = student.Id,
-            FirstName = student.FirstName,
-            LastName = student.LastName,
-            FullName = $"{student.FirstName} {student.LastName}",
-            PhoneNumber = student.PhoneNumber,
-            DateOfBirth = student.DateOfBirth,
-            CreatedAt = student.CreatedAt,
-            UpdatedAt = student.UpdatedAt,
-        }).ToListAsync();
+        throw new NotImplementedException();
     }
 
-    public Task<bool> PhoneNumberExistsAsync(string phoneNumber)
+    public Task<List<StudentViewModel>> GetAllByCourseIdAsync(int courseId)
     {
-        return unitOfWork.Students.ExistsAsync(s => s.PhoneNumber == phoneNumber);
+        throw new NotImplementedException();
     }
 }
