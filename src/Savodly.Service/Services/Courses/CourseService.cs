@@ -10,6 +10,20 @@ public class CourseService(IUnitOfWork unitOfWork) : ICourseService
 {
     public async Task CreateAsync(CourseCreateModel model)
     {
+        if (model.EndTime <= model.StartTime)
+        {
+            throw new ArgumentIsNotValidException("End time must be greater than start time");
+        }
+
+        if (model.StartTime > DateTime.UtcNow)
+        {
+            model.Status = CourseStatus.Upcoming;
+        }
+        else
+        {
+            model.Status = CourseStatus.Active;
+        }
+
         unitOfWork.Courses.Insert(new Course
         {
             Name = model.Name,
@@ -87,6 +101,12 @@ public class CourseService(IUnitOfWork unitOfWork) : ICourseService
         var course = await unitOfWork.Courses.SelectAsync(x => x.Id == model.CourseId)
             ?? throw new NotFoundException("Course not found");
 
+        if(await unitOfWork.StudentCourses
+            .SelectAllAsQueryable()
+            .AnyAsync(x => x.StudentId == model.StudentId && x.CourseId == model.CourseId))
+        {
+            throw new AlreadyExistException("This student is already added to this course");
+        }
         var status = CourseStatus.Upcoming;
 
         if (course.Status != CourseStatus.Upcoming)
