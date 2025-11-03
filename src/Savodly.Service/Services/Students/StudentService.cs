@@ -86,13 +86,39 @@ public class StudentService(IUnitOfWork unitOfWork) : IStudentService
             ?? throw new NotFoundException("This student not found!");
     }
 
-    public Task<List<StudentViewModel>> GetAllByTeacherIdAsync(int teacherId)
+    public async Task<List<StudentViewModel>> GetAllByTeacherIdAsync(int teacherId)
     {
-        throw new NotImplementedException();
+        var students = unitOfWork.Students
+            .SelectAllAsQueryable()
+            .Where(s => !s.IsDeleted)
+            .Where(s => s.StudentCourses.Any(sc => sc.Course.TeacherId == teacherId));
+
+        return await students.Select(s => new StudentViewModel
+        {
+            Id = s.Id,
+            FirstName = s.FirstName,
+            LastName = s.LastName,
+            PhoneNumber = s.PhoneNumber,
+            DateOfBirth = s.DateOfBirth,
+        })
+        .ToListAsync();
     }
 
-    public Task<List<StudentViewModel>> GetAllByCourseIdAsync(int courseId)
+    public async Task<List<StudentViewModel>> GetAllByCourseIdAsync(int courseId)
     {
-        throw new NotImplementedException();
+        var students = unitOfWork.Students
+            .SelectAllAsQueryable()
+            .Where(s => !s.IsDeleted)
+            .Where(s => s.StudentCourses.Any(sc => sc.CourseId == courseId));
+
+        return await students.Select(s => new StudentViewModel
+        {
+            Id = s.Id,
+            FirstName = s.FirstName,
+            LastName = s.LastName,
+            PhoneNumber = s.PhoneNumber,
+            DateOfBirth = s.DateOfBirth,
+        })
+        .ToListAsync();
     }
 }
